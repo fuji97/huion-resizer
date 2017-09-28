@@ -1,0 +1,94 @@
+﻿<Controls:MetroWindow x:Class="HuionResizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HuionResizer"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        mc:Ignorable="d"
+        Loaded="WindowLoaded"
+        Title="Huion Resizer" Width="800" Height="400">
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Content="Impostazioni" Click="openSettings" />
+            <Button Content="Informazioni" Click="openInfos" />
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout x:Name="SettingsFlyout" Header="Impostazioni" Position="Right" Width="400">
+                <ScrollViewer>
+                    <StackPanel Orientation="Vertical" Margin="12">
+                        <Label>File di configurazione:</Label>
+                        <TextBox x:Name="ConfigPath"></TextBox>
+                        <Button HorizontalAlignment="Left" Click="ButtonBase_OnClick" Margin="0,8,0,0">Sfoglia</Button>
+                        <Separator Margin="0,10"></Separator>
+                        <Label>Eseguibile:</Label>
+                        <TextBox x:Name="ExePath"></TextBox>
+                        <Button HorizontalAlignment="Left" Margin="0,8,0,0" Click="ButtonExe_onClick">Sfoglia</Button>
+                        <Separator Margin="0,10"></Separator>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" HorizontalContentAlignment="Left">Nome processo:</Label>
+                            <TextBox x:Name="ProcessName" Grid.Column="1" TextChanged="ProcessName_OnTextChanged"></TextBox>
+                        </Grid>
+                        <Separator Margin="0,10"></Separator>
+                        <CheckBox x:Name="AutoRestartApp" Checked="AutoRestartApp_OnChecked" Unchecked="AutoRestartApp_OnUnchecked" Margin="0,6">Termina e riavvia automaticamente il processo</CheckBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+    <StackPanel Orientation="Vertical">
+        
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+            <Grid Margin="12" Height="360">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1.35*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="74"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Label x:Name="TextTabletWidth" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Larghezza Tablet:</Label>
+                <TextBox x:Name="TabletWidth" Grid.Row="0" Grid.Column="1" TextChanged="UpdateRect" VerticalAlignment="Center">10</TextBox>
+                <Label x:Name="TextTabletHeight" Grid.Row="1" Grid.Column="0"  VerticalAlignment="Center">Altezza Tablet:</Label>
+                <TextBox x:Name="TabletHeight" Grid.Row="1" Grid.Column="1" TextChanged="UpdateRect" VerticalAlignment="Center">6.25</TextBox>
+                <Label x:Name="TextScreenWidth" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Larghezza Schermo:</Label>
+                <TextBox x:Name="ScreenWidth" Grid.Row="2" Grid.Column="1" TextChanged="UpdateRect" VerticalAlignment="Center">1920</TextBox>
+                <Label x:Name="TextScreenHeight" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Altezza Schermo:</Label>
+                <TextBox x:Name="ScreenHeight" Grid.Row="3" Grid.Column="1" TextChanged="UpdateRect" VerticalAlignment="Center">1080</TextBox>
+                <Label x:Name="TextStartingWidth" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Larghezza di partenza:</Label>
+                <TextBox x:Name="StartingWidth" Grid.Row="4" Grid.Column="1" TextChanged="UpdateRect" VerticalAlignment="Center">0</TextBox>
+                <Label x:Name="TextStartingHeight" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Altezza di partenza:</Label>
+                <TextBox x:Name="StartingHeight" Grid.Row="5" Grid.Column="1" TextChanged="UpdateRect" VerticalAlignment="Center">0</TextBox>
+                <Label x:Name="TextAspectRatio" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Dimensione area attiva:</Label>
+                <TextBox x:Name="BoxAspectRatio" Grid.Row="6" Grid.Column="1" TextChanged="UpdateRect" RenderTransformOrigin="1,102" Text=""></TextBox>
+                <Slider x:Name="AspectRatio" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" ValueChanged="UpdateRect" VerticalAlignment="Center" Style="{DynamicResource FlatSlider}" Minimum="1" Maximum="100" Value="100"/>
+                <TextBox x:Name="ResultBox" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" IsUndoEnabled="False" AcceptsReturn="True" VerticalContentAlignment="Stretch"></TextBox>
+                <StackPanel Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Button x:Name="Generate" Style="{StaticResource AccentedSquareButtonStyle}" Click="GenerateClick" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="12,8" Margin="0,0,4,0">Salva</Button>
+                    <Button x:Name ="ImportDriverValues" Style="{StaticResource AccentedSquareButtonStyle}" Click="ImportDriverValues_OnClick" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="12,8" Margin="4,0,0,0">Importa valori</Button>
+                </StackPanel>
+            </Grid>
+            <Border BorderThickness="1" Margin="12" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Canvas x:Name="BackPanel" Width="480" Height="270" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Rectangle x:Name="SelectionRectangle" Stroke="LightBlue" Fill="#220000FF" Width="20" Height="20" MouseDown="DragMouseDown" MouseMove="DragMouseMove" MouseUp="DragMouseUp" Canvas.Left="0" Canvas.Top="0"/>
+                </Canvas>
+            </Border>
+        </StackPanel>
+    </StackPanel>
+
+</Controls:MetroWindow>
